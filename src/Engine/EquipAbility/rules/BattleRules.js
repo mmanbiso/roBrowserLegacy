@@ -49,7 +49,6 @@ const CLASS_MAP = [
 ];
 
 const BattleRules = [
-
 	/*
 	 * 근접 물리 데미지
 	 * Melee physical damage
@@ -217,7 +216,9 @@ const BattleRules = [
 		apply(ctx, m, cond) {
 			const line = m.input;
 
-			if (/근접|원거리|소형|중형|대형|모든\s*크기|보스\s*등급|일반\s*등급|보스형|일반형|속성|종족|스킬/.test(line)) {
+			if (
+				/근접|원거리|소형|중형|대형|모든\s*크기|보스\s*등급|일반\s*등급|보스형|일반형|속성|종족|스킬/.test(line)
+			) {
 				return false;
 			}
 

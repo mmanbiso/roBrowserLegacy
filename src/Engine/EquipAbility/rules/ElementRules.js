@@ -98,14 +98,7 @@ const ElementRules = [
 					finalValue = Condition.apply(ctx, cond, finalValue);
 					if (!finalValue) return;
 
-					addStat(
-						ctx,
-						'element_' + el + getSuffix(mode),
-						buildLabel(el, mode),
-						finalValue,
-						'%',
-						'element'
-					);
+					addStat(ctx, 'element_' + el + getSuffix(mode), buildLabel(el, mode), finalValue, '%', 'element');
 
 					applied = true;
 				});
@@ -189,21 +182,14 @@ function detectModes(line) {
 
 	// 받는 데미지 감소 / 내성 / 저항
 	// Damage reduction / resistance
-	if (
-		(/받는|내성|저항/.test(line) || /데미지.*감소/.test(line)) &&
-		!/주는/.test(line)
-	) {
+	if ((/받는|내성|저항/.test(line) || /데미지.*감소/.test(line)) && !/주는/.test(line)) {
 		modes.push({ type: 'phys', mode: 'res' });
 		return modes;
 	}
 
 	// 물리, 마법 동시
 	// Both physical and magical damage
-	if (
-		/물리\s*,\s*마법/.test(line) ||
-		/물리\s*\/\s*마법/.test(line) ||
-		/물리\s*및\s*마법/.test(line)
-	) {
+	if (/물리\s*,\s*마법/.test(line) || /물리\s*\/\s*마법/.test(line) || /물리\s*및\s*마법/.test(line)) {
 		modes.push({ type: 'phys', mode: 'damage' });
 		modes.push({ type: 'magic', mode: 'damage' });
 		return modes;

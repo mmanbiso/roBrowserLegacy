@@ -185,7 +185,15 @@ function parseSentence(sentence, ctx) {
 			const effectText = cleanEffectLine(Condition.strip(clause));
 
 			if (DEBUG) {
-				console.log('[EA CONDITION]', condition.type, condition.target || '', 'clause:', clause, 'effect:', effectText);
+				console.log(
+					'[EA CONDITION]',
+					condition.type,
+					condition.target || '',
+					'clause:',
+					clause,
+					'effect:',
+					effectText
+				);
 			}
 
 			if (effectText && !isMetaLine(effectText) && effectText !== clause) {
@@ -198,9 +206,7 @@ function parseSentence(sentence, ctx) {
 		// 대상만 있는 구문 보존
 		// Keep target-only clause for the next effect clause
 		if (isTargetOnlyClause(clause)) {
-			pendingTargetPrefix = pendingTargetPrefix
-				? pendingTargetPrefix + ', ' + clause
-				: clause;
+			pendingTargetPrefix = pendingTargetPrefix ? pendingTargetPrefix + ', ' + clause : clause;
 
 			if (DEBUG) {
 				console.log('[EA TARGET HOLD]', pendingTargetPrefix);
@@ -303,7 +309,10 @@ function makeCombinedCondition(stack) {
 
 	return {
 		type: stack.map(c => c.type).join('+'),
-		target: stack.map(c => c.target).filter(Boolean).join('+'),
+		target: stack
+			.map(c => c.target)
+			.filter(Boolean)
+			.join('+'),
 
 		check(ctx) {
 			return stack.every(c => !c.check || c.check(ctx));
@@ -348,9 +357,7 @@ function collectItemDescriptions(item, ctx) {
 			return;
 		}
 
-		text = String(text)
-			.replace(/%d/g, value)
-			.replace(/%%/g, '%');
+		text = String(text).replace(/%d/g, value).replace(/%%/g, '%');
 
 		lines.push(text);
 	});
@@ -459,7 +466,11 @@ function splitClauses(sentence) {
 	const protections = [];
 	text = protect(text, /물리\s*,\s*마법/g, protections);
 	text = protect(text, /마법\s*,\s*물리/g, protections);
-	text = protect(text, /[무수지화풍독성암염불사]\s*,\s*[무수지화풍독성암염불사](?:\s*,\s*[무수지화풍독성암염불사])*\s*속성/g, protections);
+	text = protect(
+		text,
+		/[무수지화풍독성암염불사]\s*,\s*[무수지화풍독성암염불사](?:\s*,\s*[무수지화풍독성암염불사])*\s*속성/g,
+		protections
+	);
 
 	return text
 		.split(',')
@@ -556,7 +567,9 @@ function isMetaLine(line) {
  * Whether the line contains effect/condition keywords
  */
 function hasEffectKeyword(line) {
-	return /(?:\bATK\b|\bMATK\b|\bDEF\b|\bMDEF\b|\bHIT\b|\bFLEE\b|\bCRI\b|\bASPD\b|\bMSP\b|\bMHP\b|\bMaxHP\b|\bMaxSP\b|\bHP\b|\bSP\b|STR|AGI|VIT|INT|DEX|LUK|POW|STA|WIS|SPL|CON|CRT|P\.ATK|S\.MATK|RES|MRES|C\.Rate|C\.RATE|데미지|공격력|방어|무시|캐스팅|쿨타임|후딜레이|공격\s*속도|공격속도|제련|등급|함께\s*(?:장착|착용)|(?:와|과)\s*(?:함께\s*)?(?:장착|착용)|착용\s*시|장착\s*시|속성|종족|형\s*몬스터|크기|순수\s*(?:STR|AGI|VIT|INT|DEX|LUK))/i.test(line);
+	return /(?:\bATK\b|\bMATK\b|\bDEF\b|\bMDEF\b|\bHIT\b|\bFLEE\b|\bCRI\b|\bASPD\b|\bMSP\b|\bMHP\b|\bMaxHP\b|\bMaxSP\b|\bHP\b|\bSP\b|STR|AGI|VIT|INT|DEX|LUK|POW|STA|WIS|SPL|CON|CRT|P\.ATK|S\.MATK|RES|MRES|C\.Rate|C\.RATE|데미지|공격력|방어|무시|캐스팅|쿨타임|후딜레이|공격\s*속도|공격속도|제련|등급|함께\s*(?:장착|착용)|(?:와|과)\s*(?:함께\s*)?(?:장착|착용)|착용\s*시|장착\s*시|속성|종족|형\s*몬스터|크기|순수\s*(?:STR|AGI|VIT|INT|DEX|LUK))/i.test(
+		line
+	);
 }
 
 /*
@@ -644,12 +657,7 @@ function getCardIds(item) {
 
 	if (Array.isArray(slot)) return slot;
 
-	return [
-		slot.card1,
-		slot.card2,
-		slot.card3,
-		slot.card4
-	];
+	return [slot.card1, slot.card2, slot.card3, slot.card4];
 }
 
 function getRandomOptions(item) {
@@ -657,11 +665,13 @@ function getRandomOptions(item) {
 }
 
 function getBaseLevel() {
-	return Session.Character?.level ||
+	return (
+		Session.Character?.level ||
 		Session.Character?.lv ||
 		Session.Character?.baseLevel ||
 		Session.Character?.BaseLevel ||
-		0;
+		0
+	);
 }
 
 function getSkillLevels() {

@@ -25,7 +25,6 @@ function extractValue(line) {
 }
 
 const SpecialRules = [
-
 	{
 		pattern: /경험치/i,
 
@@ -69,19 +68,11 @@ const SpecialRules = [
 
 			const isHP = /HP/i.test(line);
 
-			addStat(
-				ctx,
-				isHP ? 'hp_drain' : 'sp_drain',
-				isHP ? 'HP 흡수' : 'SP 흡수',
-				value,
-				'%',
-				'special'
-			);
+			addStat(ctx, isHP ? 'hp_drain' : 'sp_drain', isHP ? 'HP 흡수' : 'SP 흡수', value, '%', 'special');
 
 			return true;
 		}
 	}
-
 ];
 
 export default SpecialRules;

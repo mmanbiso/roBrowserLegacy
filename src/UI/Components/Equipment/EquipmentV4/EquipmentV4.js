@@ -36,7 +36,6 @@ import Inventory from 'UI/Components/Inventory/Inventory.js';
 import Entity from 'Renderer/Entity/Entity.js';
 import EquipAbility from 'UI/Components/EquipAbility/EquipAbility.js';
 
-
 /**
  * Create Component
  */
@@ -173,28 +172,29 @@ EquipmentV4.init = function init() {
 	this.ui.find('.show_equip').mousedown(toggleEquip);
 	this.ui.find('.show_costume').mousedown(toggleCostume);
 
-this.ui.find('.cartitems').click(onCartItems);
+	this.ui.find('.cartitems').click(onCartItems);
 
-// 🔥 여기 추가
-this.ui.find('.ability_equip').click(onEquipAbility);
+	// 🔥 여기 추가
+	this.ui.find('.ability_equip').click(onEquipAbility);
 
-Client.loadFile(DB.INTERFACE_PATH + 'basic_interface/btn_e_ability_a.bmp', function (data) {
-	EquipmentV4.ui.find('.ability_equip').css('backgroundImage', 'url(' + data + ')');
-});
-
-EquipmentV4.ui.find('.ability_equip')
-	.on('mouseover mousedown', function () {
-		Client.loadFile(DB.INTERFACE_PATH + 'basic_interface/btn_e_ability_b.bmp', function (data) {
-			EquipmentV4.ui.find('.ability_equip').css('backgroundImage', 'url(' + data + ')');
-		});
-	})
-	.on('mouseout mouseup', function () {
-		Client.loadFile(DB.INTERFACE_PATH + 'basic_interface/btn_e_ability_a.bmp', function (data) {
-			EquipmentV4.ui.find('.ability_equip').css('backgroundImage', 'url(' + data + ')');
-		});
+	Client.loadFile(DB.INTERFACE_PATH + 'basic_interface/btn_e_ability_a.bmp', function (data) {
+		EquipmentV4.ui.find('.ability_equip').css('backgroundImage', 'url(' + data + ')');
 	});
-this.ui.find('.switch_equip').click(onSwtichEquip);
-	
+
+	EquipmentV4.ui
+		.find('.ability_equip')
+		.on('mouseover mousedown', function () {
+			Client.loadFile(DB.INTERFACE_PATH + 'basic_interface/btn_e_ability_b.bmp', function (data) {
+				EquipmentV4.ui.find('.ability_equip').css('backgroundImage', 'url(' + data + ')');
+			});
+		})
+		.on('mouseout mouseup', function () {
+			Client.loadFile(DB.INTERFACE_PATH + 'basic_interface/btn_e_ability_a.bmp', function (data) {
+				EquipmentV4.ui.find('.ability_equip').css('backgroundImage', 'url(' + data + ')');
+			});
+		});
+	this.ui.find('.switch_equip').click(onSwtichEquip);
+
 	this.loadTitles();
 
 	// drag, drop items

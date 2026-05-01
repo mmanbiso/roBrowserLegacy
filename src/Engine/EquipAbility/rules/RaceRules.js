@@ -85,14 +85,7 @@ const RaceRules = [
 					finalValue = Condition.apply(ctx, cond, finalValue);
 					if (!finalValue) return;
 
-					addStat(
-						ctx,
-						'race_' + rc + getSuffix(mode),
-						buildLabel(rc, mode),
-						finalValue,
-						'%',
-						'race'
-					);
+					addStat(ctx, 'race_' + rc + getSuffix(mode), buildLabel(rc, mode), finalValue, '%', 'race');
 
 					appliedAny = true;
 				});

@@ -53,7 +53,6 @@ const HP_SP_PATTERN =
 	/(^|[^A-Za-z.])((?:MAXHP)|(?:MAXSP)|(?:MHP)|(?:MSP)|(?:HP)|(?:SP))\s*([+\-]?\s*\d+(?:\.\d+)?)\s*(%)?\s*(증가|감소)?/gi;
 
 const AbilityRules = [
-
 	/*
 	 * ATK / MATK / DEF / MDEF / HIT / FLEE / CRI
 	 */
@@ -81,14 +80,7 @@ const AbilityRules = [
 				value = Condition.apply(ctx, cond, value);
 				if (!value) return '';
 
-				addStat(
-					ctx,
-					info.key,
-					info.label,
-					value,
-					percent ? '%' : '',
-					'ability'
-				);
+				addStat(ctx, info.key, info.label, value, percent ? '%' : '', 'ability');
 
 				matched = true;
 				return '';
@@ -125,14 +117,7 @@ const AbilityRules = [
 				value = Condition.apply(ctx, cond, value);
 				if (!value) return '';
 
-				addStat(
-					ctx,
-					info.key,
-					info.label,
-					value,
-					percent ? '%' : '',
-					'ability'
-				);
+				addStat(ctx, info.key, info.label, value, percent ? '%' : '', 'ability');
 
 				matched = true;
 				return '';
@@ -276,7 +261,6 @@ const AbilityRules = [
 			return true;
 		}
 	}
-
 ];
 
 export default AbilityRules;

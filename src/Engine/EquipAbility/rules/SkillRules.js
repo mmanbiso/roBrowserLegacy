@@ -87,7 +87,6 @@ function extractValue(line) {
 }
 
 const SkillRules = [
-
 	{
 		pattern: /(데미지|Damage)/i,
 
@@ -107,14 +106,7 @@ const SkillRules = [
 			value = Condition.apply(ctx, cond, value);
 			if (!value) return false;
 
-			addStat(
-				ctx,
-				'skill_' + skill.id + '_damage',
-				skill.name + ' 데미지',
-				value,
-				'%',
-				'skill'
-			);
+			addStat(ctx, 'skill_' + skill.id + '_damage', skill.name + ' 데미지', value, '%', 'skill');
 
 			return true;
 		}
@@ -137,14 +129,7 @@ const SkillRules = [
 			value = Condition.apply(ctx, cond, value);
 			if (!value) return false;
 
-			addStat(
-				ctx,
-				'skill_' + skill.id + '_cooldown',
-				skill.name + ' 쿨타임',
-				value,
-				'초',
-				'skill'
-			);
+			addStat(ctx, 'skill_' + skill.id + '_cooldown', skill.name + ' 쿨타임', value, '초', 'skill');
 
 			return true;
 		}
@@ -171,19 +156,11 @@ const SkillRules = [
 
 			const unit = /초/.test(line) ? '초' : '%';
 
-			addStat(
-				ctx,
-				'skill_' + skill.id + '_cast',
-				skill.name + ' 캐스팅',
-				value,
-				unit,
-				'skill'
-			);
+			addStat(ctx, 'skill_' + skill.id + '_cast', skill.name + ' 캐스팅', value, unit, 'skill');
 
 			return true;
 		}
 	}
-
 ];
 
 export default SkillRules;

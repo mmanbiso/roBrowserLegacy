@@ -36,8 +36,8 @@ Condition.extract = function extract(line) {
 		const step = Number(m[1]);
 
 		return makeCondition('refine_each', {
-			check: (ctx) => (ctx.refine || 0) >= step,
-			multiplier: (ctx) => Math.floor((ctx.refine || 0) / step)
+			check: ctx => (ctx.refine || 0) >= step,
+			multiplier: ctx => Math.floor((ctx.refine || 0) / step)
 		});
 	}
 
@@ -46,8 +46,8 @@ Condition.extract = function extract(line) {
 		const step = Number(m[1]);
 
 		return makeCondition('refine_each', {
-			check: (ctx) => (ctx.refine || 0) >= step,
-			multiplier: (ctx) => Math.floor((ctx.refine || 0) / step)
+			check: ctx => (ctx.refine || 0) >= step,
+			multiplier: ctx => Math.floor((ctx.refine || 0) / step)
 		});
 	}
 
@@ -56,20 +56,20 @@ Condition.extract = function extract(line) {
 	// 예: 제련도의 합이 18제련 이상인 경우
 	// Example: total refine is 18 or higher
 	// =====================================================
-    m = line.match(/제련도(?:의)?\s*합(?:이)?\s*(\d+)\s*제련?\s*(이상|미만|초과|이하)?/);
-    if (m) {
-    	const need = Number(m[1]);
-	    const type = m[2] || '이상';
+	m = line.match(/제련도(?:의)?\s*합(?:이)?\s*(\d+)\s*제련?\s*(이상|미만|초과|이하)?/);
+	if (m) {
+		const need = Number(m[1]);
+		const type = m[2] || '이상';
 
-	    return makeCondition('total_refine', {
-		    check: (ctx) => {
-			    const base = ctx.activeEquipCondition || null;
-		    	const target = base && base.target ? base.target : '';
+		return makeCondition('total_refine', {
+			check: ctx => {
+				const base = ctx.activeEquipCondition || null;
+				const target = base && base.target ? base.target : '';
 
-			    return compareNumber(getSetRefineTotal(ctx, target), need, type);
-    		}
-	    });
-    }
+				return compareNumber(getSetRefineTotal(ctx, target), need, type);
+			}
+		});
+	}
 	// =====================================================
 	// 3. 제련 미만 / Refine below
 	// Must be checked before refine at least
@@ -79,7 +79,7 @@ Condition.extract = function extract(line) {
 		const need = Number(m[1] || m[2]);
 
 		return makeCondition('refine_below', {
-			check: (ctx) => (ctx.refine || 0) < need
+			check: ctx => (ctx.refine || 0) < need
 		});
 	}
 
@@ -91,7 +91,7 @@ Condition.extract = function extract(line) {
 		const need = Number(m[1] || m[2]);
 
 		return makeCondition('refine_over', {
-			check: (ctx) => (ctx.refine || 0) > need
+			check: ctx => (ctx.refine || 0) > need
 		});
 	}
 
@@ -103,7 +103,7 @@ Condition.extract = function extract(line) {
 		const need = Number(m[1] || m[2]);
 
 		return makeCondition('refine_at_least', {
-			check: (ctx) => (ctx.refine || 0) >= need
+			check: ctx => (ctx.refine || 0) >= need
 		});
 	}
 
@@ -117,7 +117,7 @@ Condition.extract = function extract(line) {
 		const gradeNum = gradeToNumber(grade);
 
 		return makeCondition('grade', {
-			check: (ctx) => compareNumber(ctx.grade || 0, gradeNum, type)
+			check: ctx => compareNumber(ctx.grade || 0, gradeNum, type)
 		});
 	}
 
@@ -131,7 +131,7 @@ Condition.extract = function extract(line) {
 		const type = m[2];
 
 		return makeCondition('level', {
-			check: (ctx) => compareNumber(ctx.baseLevel || 0, level, type)
+			check: ctx => compareNumber(ctx.baseLevel || 0, level, type)
 		});
 	}
 
@@ -147,7 +147,7 @@ Condition.extract = function extract(line) {
 		const type = m[3];
 
 		return makeCondition('pure_stat', {
-			check: (ctx) => compareNumber(getCharacterStat(stat), need, type)
+			check: ctx => compareNumber(getCharacterStat(stat), need, type)
 		});
 	}
 
@@ -159,8 +159,8 @@ Condition.extract = function extract(line) {
 		const step = Number(m[1]);
 
 		return makeCondition('level_each', {
-			check: (ctx) => (ctx.baseLevel || 0) >= step,
-			multiplier: (ctx) => Math.floor((ctx.baseLevel || 0) / step)
+			check: ctx => (ctx.baseLevel || 0) >= step,
+			multiplier: ctx => Math.floor((ctx.baseLevel || 0) / step)
 		});
 	}
 	// =====================================================
@@ -175,7 +175,7 @@ Condition.extract = function extract(line) {
 		const targetType = m[2];
 
 		return makeCondition('equip_level', {
-			check: (ctx) => checkEquipLevel(ctx, targetType, need)
+			check: ctx => checkEquipLevel(ctx, targetType, need)
 		});
 	}
 
@@ -190,8 +190,8 @@ Condition.extract = function extract(line) {
 		const mult = Number(m[1]);
 
 		return makeCondition('total_refine_multiplier', {
-			multiplier: (ctx) => getSetRefineTotal(ctx, getActiveSetTarget(ctx)) * mult,
-			check: (ctx) => getSetRefineTotal(ctx, getActiveSetTarget(ctx)) > 0
+			multiplier: ctx => getSetRefineTotal(ctx, getActiveSetTarget(ctx)) * mult,
+			check: ctx => getSetRefineTotal(ctx, getActiveSetTarget(ctx)) > 0
 		});
 	}
 
@@ -209,7 +209,7 @@ Condition.extract = function extract(line) {
 
 		return makeCondition('set_target_grade', {
 			target: targetName,
-			check: (ctx) => checkSetTargetGrade(ctx, targetName, grade, type)
+			check: ctx => checkSetTargetGrade(ctx, targetName, grade, type)
 		});
 	}
 
@@ -226,11 +226,11 @@ Condition.extract = function extract(line) {
 
 		return makeCondition('skill_each', {
 			target: skill,
-			check: (ctx) => {
+			check: ctx => {
 				const lv = getSkillLevel(ctx, skill);
 				return lv >= step;
 			},
-			multiplier: (ctx) => {
+			multiplier: ctx => {
 				const lv = getSkillLevel(ctx, skill);
 				return Math.floor(lv / step);
 			}
@@ -245,11 +245,11 @@ Condition.extract = function extract(line) {
 		const step = Number(m[2]);
 
 		return makeCondition('skill_each', {
-			check: (ctx) => {
+			check: ctx => {
 				const lv = getSkillLevel(ctx, skill);
 				return lv >= step;
 			},
-			multiplier: (ctx) => {
+			multiplier: ctx => {
 				const lv = getSkillLevel(ctx, skill);
 				return Math.floor(lv / step);
 			}
@@ -265,7 +265,7 @@ Condition.extract = function extract(line) {
 		const need = Number(m[2]);
 
 		return makeCondition('skill_at_least', {
-			check: (ctx) => getSkillLevel(ctx, skill) >= need
+			check: ctx => getSkillLevel(ctx, skill) >= need
 		});
 	}
 
@@ -281,7 +281,7 @@ Condition.extract = function extract(line) {
 
 		return makeCondition('equip_with', {
 			target: itemName,
-			check: (ctx) => hasEquippedItem(ctx, itemName)
+			check: ctx => hasEquippedItem(ctx, itemName)
 		});
 	}
 
@@ -315,47 +315,58 @@ Condition.extract = function extract(line) {
  * Strip condition text from line
  */
 Condition.strip = function strip(line) {
-	return String(line || '')
-		// Refine each
-		.replace(/^\s*(?:무기\s*)?\d+\s*제련\s*(?:당|마다|시\s*마다)\s*[:,]?\s*/g, '')
-		.replace(/^\s*제련도\s*\d+\s*당\s*[:,]?\s*/g, '')
+	return (
+		String(line || '')
+			// Refine each
+			.replace(/^\s*(?:무기\s*)?\d+\s*제련\s*(?:당|마다|시\s*마다)\s*[:,]?\s*/g, '')
+			.replace(/^\s*제련도\s*\d+\s*당\s*[:,]?\s*/g, '')
 
-		// Total refine
-		.replace(/^\s*제련도(?:의)?\s*합(?:이)?\s*\d+\s*제련?\s*(?:이상|미만|초과|이하)?(?:인\s*)?(?:경우|시)?\s*[:,]?\s*/g, '')
+			// Total refine
+			.replace(
+				/^\s*제련도(?:의)?\s*합(?:이)?\s*\d+\s*제련?\s*(?:이상|미만|초과|이하)?(?:인\s*)?(?:경우|시)?\s*[:,]?\s*/g,
+				''
+			)
 
-		// Refine below / over / at least
-		.replace(/^\s*\d+\s*제련\s*(?:미만|초과|이상|시|일\s*경우)\s*[:,]?\s*/g, '')
-		.replace(/^\s*\d+\s*(?:미만|초과|이상)\s*제련\s*(?:시)?\s*[:,]?\s*/g, '')
+			// Refine below / over / at least
+			.replace(/^\s*\d+\s*제련\s*(?:미만|초과|이상|시|일\s*경우)\s*[:,]?\s*/g, '')
+			.replace(/^\s*\d+\s*(?:미만|초과|이상)\s*제련\s*(?:시)?\s*[:,]?\s*/g, '')
 
-		// Grade
-		.replace(/^\s*\[?[DCBA]등급\]?\s*(?:이상|미만|초과|이하|일\s*경우|인\s*경우)?\s*[:,]?\s*/g, '')
+			// Grade
+			.replace(/^\s*\[?[DCBA]등급\]?\s*(?:이상|미만|초과|이하|일\s*경우|인\s*경우)?\s*[:,]?\s*/g, '')
 
-		// Level
-		.replace(/^\s*(?:BaseLv|베이스\s*레벨|캐릭터\s*레벨)\s*\d+\s*(?:이상|미만|초과|이하)\s*[:,]?\s*/g, '')
-		.replace(/^\s*(?:BaseLv|베이스\s*레벨)\s*\d+\s*(?:당|마다)\s*[:,]?\s*/g, '')
+			// Level
+			.replace(/^\s*(?:BaseLv|베이스\s*레벨|캐릭터\s*레벨)\s*\d+\s*(?:이상|미만|초과|이하)\s*[:,]?\s*/g, '')
+			.replace(/^\s*(?:BaseLv|베이스\s*레벨)\s*\d+\s*(?:당|마다)\s*[:,]?\s*/g, '')
 
-		// Pure stat
-		.replace(/^\s*순수\s*(?:STR|AGI|VIT|INT|DEX|LUK)\s*\d+\s*(?:이상|미만|초과|이하)(?:인\s*)?(?:경우|시)?\s*[:,]?\s*/ig, '')
-		// Weapon / armor level
-		.replace(/^\s*\d+\s*레벨\s*(?:무기|방어구)(?:인\s*)?(?:경우|시|일\s*때)\s*[:,]?\s*/g, '')
+			// Pure stat
+			.replace(
+				/^\s*순수\s*(?:STR|AGI|VIT|INT|DEX|LUK)\s*\d+\s*(?:이상|미만|초과|이하)(?:인\s*)?(?:경우|시)?\s*[:,]?\s*/gi,
+				''
+			)
+			// Weapon / armor level
+			.replace(/^\s*\d+\s*레벨\s*(?:무기|방어구)(?:인\s*)?(?:경우|시|일\s*때)\s*[:,]?\s*/g, '')
 
-		// Total refine multiplier
-		.replace(/^\s*제련도\s*합(?:의)?\s*\d+\s*배만큼\s*/g, '')
+			// Total refine multiplier
+			.replace(/^\s*제련도\s*합(?:의)?\s*\d+\s*배만큼\s*/g, '')
 
-		// Set target grade
-		.replace(/^\s*.+?의\s*등급이\s*각\s*[DCBA]등급\s*(?:이상|미만|초과|이하)?(?:일\s*)?(?:경우|시)?\s*[:,]?\s*/g, '')
+			// Set target grade
+			.replace(
+				/^\s*.+?의\s*등급이\s*각\s*[DCBA]등급\s*(?:이상|미만|초과|이하)?(?:일\s*)?(?:경우|시)?\s*[:,]?\s*/g,
+				''
+			)
 
-		// Skill level without brackets
-		.replace(/^\s*.+?\s*\d+\s*레벨\s*(?:당|마다)\s*/g, '')
+			// Skill level without brackets
+			.replace(/^\s*.+?\s*\d+\s*레벨\s*(?:당|마다)\s*/g, '')
 
-		// Skill level
-		.replace(/^\s*\[[^\]]+\]\s*\d+레벨당\s*/g, '')
-		.replace(/^\s*\[[^\]]+\]\s*\d+레벨.*(?:일\s*시|일\s*때|경우)\s*[:,]?\s*/g, '')
+			// Skill level
+			.replace(/^\s*\[[^\]]+\]\s*\d+레벨당\s*/g, '')
+			.replace(/^\s*\[[^\]]+\]\s*\d+레벨.*(?:일\s*시|일\s*때|경우)\s*[:,]?\s*/g, '')
 
-		// Equip with
-		.replace(/^\s*.+?(?:와|과)\s*(?:함께\s*)?(?:장착|착용)\s*(?:시|일\s*시|일\s*때|경우)\s*[:,]?\s*/g, '')
+			// Equip with
+			.replace(/^\s*.+?(?:와|과)\s*(?:함께\s*)?(?:장착|착용)\s*(?:시|일\s*시|일\s*때|경우)\s*[:,]?\s*/g, '')
 
-		.trim();
+			.trim()
+	);
 };
 
 /*
@@ -422,12 +433,7 @@ function getSetRefineTotal(ctx, targetName) {
 		const info = ctx.DB.getItemInfo(item.ITID);
 		if (!info) return;
 
-		const names = [
-			info.identifiedDisplayName,
-			info.identifiedName,
-			info.Name,
-			info.name
-		].map(normalizeItemName);
+		const names = [info.identifiedDisplayName, info.identifiedName, info.Name, info.name].map(normalizeItemName);
 
 		if (names.some(name => name === targetName || name.includes(targetName) || targetName.includes(name))) {
 			total += Number(item.RefiningLevel || item.Refine || 0);
@@ -462,7 +468,6 @@ function getSetRefineTotal(ctx, targetName) {
  * =========================================================
  */
 
-
 /*
  * 장착 아이템 확인
  * Check equipped item by name
@@ -482,7 +487,6 @@ function hasEquippedItem(ctx, targetName) {
 	});
 }
 
-
 /*
  * 스킬 레벨 가져오기
  * Get skill level
@@ -495,11 +499,8 @@ function getSkillLevel(ctx, skillName) {
 
 	if (!ctx.skillLevels) return 0;
 
-	return ctx.skillLevels[skillName] ||
-		ctx.skillLevels['[' + skillName + ']'] ||
-		0;
+	return ctx.skillLevels[skillName] || ctx.skillLevels['[' + skillName + ']'] || 0;
 }
-
 
 /*
  * 캐릭터 순수 스탯 가져오기
@@ -526,7 +527,6 @@ function getCharacterStat(stat) {
 	return Number(ch[map[stat]] || ch[stat] || 0);
 }
 
-
 /*
  * 아이템/스킬 이름 정규화
  * Normalize item/skill names
@@ -544,7 +544,6 @@ function normalizeItemName(name) {
 		.trim();
 }
 
-
 /*
  * 등급 문자 → 숫자 변환
  * Convert grade letter to number
@@ -552,14 +551,15 @@ function normalizeItemName(name) {
  * D=1, C=2, B=3, A=4
  */
 function gradeToNumber(g) {
-	return {
-		D: 1,
-		C: 2,
-		B: 3,
-		A: 4
-	}[g] || 0;
+	return (
+		{
+			D: 1,
+			C: 2,
+			B: 3,
+			A: 4
+		}[g] || 0
+	);
 }
-
 
 /*
  * 활성 세트 대상 아이템 가져오기
@@ -572,7 +572,6 @@ function getActiveSetTarget(ctx) {
 	const base = ctx.activeEquipCondition || null;
 	return base && base.target ? base.target : '';
 }
-
 
 /*
  * 장비 레벨 조건 검사
@@ -593,22 +592,27 @@ function checkEquipLevel(ctx, targetType, need) {
 	if (targetType === '무기') {
 		if (type && type !== 'weapon') return false;
 
-		const weaponLevel =
-			Number(info.WeaponLevel || info.weaponLevel || item.WeaponLevel || item.weaponLevel || 0);
+		const weaponLevel = Number(info.WeaponLevel || info.weaponLevel || item.WeaponLevel || item.weaponLevel || 0);
 
 		return weaponLevel === need;
 	}
 
 	if (targetType === '방어구') {
-		const armorLevel =
-			Number(info.ArmorLevel || info.armorLevel || info.ArmorLv || info.armorLv || item.ArmorLevel || item.armorLevel || 0);
+		const armorLevel = Number(
+			info.ArmorLevel ||
+				info.armorLevel ||
+				info.ArmorLv ||
+				info.armorLv ||
+				item.ArmorLevel ||
+				item.armorLevel ||
+				0
+		);
 
 		return armorLevel === need;
 	}
 
 	return false;
 }
-
 
 /*
  * 세트 대상 아이템 등급 조건 검사
@@ -632,7 +636,6 @@ function checkSetTargetGrade(ctx, targetName, needGrade, compareType) {
 	return compareNumber(targetGrade, needGrade, compareType);
 }
 
-
 /*
  * 장착된 아이템 중 이름으로 찾기
  * Find equipped item by name
@@ -651,12 +654,7 @@ function findEquippedItemByName(ctx, targetName) {
 		const info = ctx.DB.getItemInfo(item.ITID);
 		if (!info) continue;
 
-		const names = [
-			info.identifiedDisplayName,
-			info.identifiedName,
-			info.Name,
-			info.name
-		].map(normalizeItemName);
+		const names = [info.identifiedDisplayName, info.identifiedName, info.Name, info.name].map(normalizeItemName);
 
 		if (names.some(name => name === targetName || name.includes(targetName) || targetName.includes(name))) {
 			return item;

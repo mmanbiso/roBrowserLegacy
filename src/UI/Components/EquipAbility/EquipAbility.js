@@ -23,16 +23,7 @@ let _scrollDragOffset = 0;
 // -------------------------------------------------
 // Tabs / 탭 목록
 // -------------------------------------------------
-const tabs = [
-	'total',
-	'category1',
-	'category2',
-	'category3',
-	'category4',
-	'category5',
-	'category6',
-	'category7'
-];
+const tabs = ['total', 'category1', 'category2', 'category3', 'category4', 'category5', 'category6', 'category7'];
 
 // -------------------------------------------------
 // Tab → Parser category mapping
@@ -101,7 +92,8 @@ EquipAbility.init = function init() {
 
 	// Base icon hover image
 	// 기본 아이콘 hover 이미지
-	this.ui.find('.ea-base-icon')
+	this.ui
+		.find('.ea-base-icon')
 		.off('mouseover mousedown mouseout mouseup')
 		.on('mouseover mousedown', function () {
 			Client.loadFile(DB.INTERFACE_PATH + 'basic_interface/sys_base_on.bmp', data => {
@@ -116,7 +108,8 @@ EquipAbility.init = function init() {
 
 	// Close button hover/click
 	// 닫기 버튼 hover/click
-	this.ui.find('.ea-close')
+	this.ui
+		.find('.ea-close')
 		.off('mouseover mousedown mouseout mouseup click')
 		.on('mouseover mousedown', () => {
 			loadInterfaceImage('basic_interface/sys_close_on.bmp', '.ea-close');
@@ -130,9 +123,12 @@ EquipAbility.init = function init() {
 
 	// Tab click
 	// 탭 클릭
-	this.ui.find('.ea-tab').off('click').on('click', function () {
-		EquipAbility.setTab(this.getAttribute('data-tab'));
-	});
+	this.ui
+		.find('.ea-tab')
+		.off('click')
+		.on('click', function () {
+			EquipAbility.setTab(this.getAttribute('data-tab'));
+		});
 
 	this.draggable(this.ui.find('.ea-titlebar'));
 	bindScrollbarEvents();
@@ -158,7 +154,7 @@ EquipAbility.toggle = function toggle() {
 // -------------------------------------------------
 EquipAbility.refresh = function refresh() {
 	const equipList = getCurrentEquipList();
-	
+
 	_lastEquipSignature = getEquipSignature(equipList);
 
 	console.log('[EquipAbility UI] equipList:', equipList);
@@ -267,16 +263,14 @@ function renderRows(page, valueBox, rows) {
 		const valueClass = value < 0 ? ' ea-value-negative' : '';
 
 		valueBox.append(
-			'<div class="ea-value-row' + valueClass + '">' +
-			escapeHtml(formatValue(row.value, row.unit, row.label)) +
-			'</div>'
+			'<div class="ea-value-row' +
+				valueClass +
+				'">' +
+				escapeHtml(formatValue(row.value, row.unit, row.label)) +
+				'</div>'
 		);
 
-		page.append(
-			'<div class="ea-row" title="' + escapeHtml(row.label) + '">' +
-			escapeHtml(row.label) +
-			'</div>'
-		);
+		page.append('<div class="ea-row" title="' + escapeHtml(row.label) + '">' + escapeHtml(row.label) + '</div>');
 
 		count++;
 	});
@@ -354,7 +348,7 @@ function updateScrollbar(rowCount) {
 	content.css('top', '-' + _scrollTop + 'px');
 
 	const trackHeight = 278;
-	const thumbHeight = Math.max(24, Math.floor(innerHeight / contentHeight * trackHeight));
+	const thumbHeight = Math.max(24, Math.floor((innerHeight / contentHeight) * trackHeight));
 	const maxThumbTop = trackHeight - thumbHeight;
 	const thumbTop = Math.floor((_scrollTop / _maxScrollTop) * maxThumbTop);
 
@@ -385,29 +379,37 @@ function setScrollTop(value) {
 function bindScrollbarEvents() {
 	const ui = EquipAbility.ui;
 
-	ui.find('.ea-scroll-up').off('click').on('click', function () {
-		setScrollTop(_scrollTop - 17);
-	});
+	ui.find('.ea-scroll-up')
+		.off('click')
+		.on('click', function () {
+			setScrollTop(_scrollTop - 17);
+		});
 
-	ui.find('.ea-scroll-down').off('click').on('click', function () {
-		setScrollTop(_scrollTop + 17);
-	});
+	ui.find('.ea-scroll-down')
+		.off('click')
+		.on('click', function () {
+			setScrollTop(_scrollTop + 17);
+		});
 
-	ui.find('.ea-inner').off('wheel').on('wheel', function (e) {
-		if (_maxScrollTop <= 0) return;
+	ui.find('.ea-inner')
+		.off('wheel')
+		.on('wheel', function (e) {
+			if (_maxScrollTop <= 0) return;
 
-		const oe = e.originalEvent || e;
-		const delta = oe.deltaY || 0;
+			const oe = e.originalEvent || e;
+			const delta = oe.deltaY || 0;
 
-		setScrollTop(_scrollTop + (delta > 0 ? 51 : -51));
-		e.preventDefault();
-	});
+			setScrollTop(_scrollTop + (delta > 0 ? 51 : -51));
+			e.preventDefault();
+		});
 
-	ui.find('.ea-scroll-thumb').off('mousedown').on('mousedown', function (e) {
-		_scrollDragging = true;
-		_scrollDragOffset = e.pageY - ui.find('.ea-scroll-thumb').offset().top;
-		e.preventDefault();
-	});
+	ui.find('.ea-scroll-thumb')
+		.off('mousedown')
+		.on('mousedown', function (e) {
+			_scrollDragging = true;
+			_scrollDragOffset = e.pageY - ui.find('.ea-scroll-thumb').offset().top;
+			e.preventDefault();
+		});
 
 	document.removeEventListener('mousemove', onEquipAbilityScrollMove);
 	document.removeEventListener('mouseup', onEquipAbilityScrollUp);
@@ -457,7 +459,8 @@ function loadInterfaceImage(file, selector) {
 	Client.loadFile(DB.INTERFACE_PATH + file, data => {
 		EquipAbility.ui.find(selector).css({
 			backgroundImage: 'url(' + data + ')',
-			backgroundRepeat: selector === '.ea-scroll-track' || selector === '.ea-scroll-thumb' ? 'repeat-y' : 'no-repeat'
+			backgroundRepeat:
+				selector === '.ea-scroll-track' || selector === '.ea-scroll-thumb' ? 'repeat-y' : 'no-repeat'
 		});
 	});
 }
@@ -486,13 +489,17 @@ function loadDataBackgrounds() {
 // HTML 이스케이프
 // -------------------------------------------------
 function escapeHtml(str) {
-	return String(str).replace(/[&<>"']/g, ch => ({
-		'&': '&amp;',
-		'<': '&lt;',
-		'>': '&gt;',
-		'"': '&quot;',
-		"'": '&#39;'
-	}[ch]));
+	return String(str).replace(
+		/[&<>"']/g,
+		ch =>
+			({
+				'&': '&amp;',
+				'<': '&lt;',
+				'>': '&gt;',
+				'"': '&quot;',
+				"'": '&#39;'
+			})[ch]
+	);
 }
 
 // -------------------------------------------------
@@ -544,23 +551,25 @@ function bindAutoRefresh() {
 // 장비 상태 비교용 문자열
 // -------------------------------------------------
 function getEquipSignature(equipList) {
-	return (equipList || []).map(item => {
-		if (!item) return '';
+	return (equipList || [])
+		.map(item => {
+			if (!item) return '';
 
-		const opt = item.Options || item.option || [];
-		const slot = item.slot || {};
+			const opt = item.Options || item.option || [];
+			const slot = item.slot || {};
 
-		return [
-			item.ITID,
-			item.RefiningLevel || 0,
-			item.enchantgrade || 0,
-			slot.card1 || 0,
-			slot.card2 || 0,
-			slot.card3 || 0,
-			slot.card4 || 0,
-			JSON.stringify(opt)
-		].join(':');
-	}).join('|');
+			return [
+				item.ITID,
+				item.RefiningLevel || 0,
+				item.enchantgrade || 0,
+				slot.card1 || 0,
+				slot.card2 || 0,
+				slot.card3 || 0,
+				slot.card4 || 0,
+				JSON.stringify(opt)
+			].join(':');
+		})
+		.join('|');
 }
 // -------------------------------------------------
 export default UIManager.addComponent(EquipAbility);

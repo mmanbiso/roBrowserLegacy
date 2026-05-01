@@ -62,10 +62,10 @@ const STAT_MAP = {
  * P.ATK + 3
  * C.Rate + 2
  */
-const STAT_PATTERN = /(^|[^A-Za-z.])((?:P\.ATK)|(?:S\.MATK)|(?:C\.RATE)|(?:C\.Rate)|(?:MRES)|(?:RES)|(?:STR)|(?:AGI)|(?:VIT)|(?:INT)|(?:DEX)|(?:LUK)|(?:POW)|(?:STA)|(?:WIS)|(?:SPL)|(?:CON)|(?:CRT))\s*([+\-]?\s*\d+(?:\.\d+)?)\s*(%)?\s*(증가|감소)?/gi;
+const STAT_PATTERN =
+	/(^|[^A-Za-z.])((?:P\.ATK)|(?:S\.MATK)|(?:C\.RATE)|(?:C\.Rate)|(?:MRES)|(?:RES)|(?:STR)|(?:AGI)|(?:VIT)|(?:INT)|(?:DEX)|(?:LUK)|(?:POW)|(?:STA)|(?:WIS)|(?:SPL)|(?:CON)|(?:CRT))\s*([+\-]?\s*\d+(?:\.\d+)?)\s*(%)?\s*(증가|감소)?/gi;
 
 const StatRules = [
-
 	{
 		pattern: STAT_PATTERN,
 
@@ -90,14 +90,7 @@ const StatRules = [
 				value = Condition.apply(ctx, cond, value);
 				if (!value) return '';
 
-				addStat(
-					ctx,
-					info.key,
-					info.label,
-					value,
-					percent ? '%' : '',
-					'stat'
-				);
+				addStat(ctx, info.key, info.label, value, percent ? '%' : '', 'stat');
 
 				matched = true;
 				return '';

@@ -66,19 +66,45 @@ Classifier.guess = function guess(line) {
 
 function isStatKey(key) {
 	return [
-		'str', 'agi', 'vit', 'int', 'dex', 'luk',
-		'pow', 'sta', 'wis', 'spl', 'con', 'crt',
-		'patk', 'smatk', 'res', 'mres', 'crate'
+		'str',
+		'agi',
+		'vit',
+		'int',
+		'dex',
+		'luk',
+		'pow',
+		'sta',
+		'wis',
+		'spl',
+		'con',
+		'crt',
+		'patk',
+		'smatk',
+		'res',
+		'mres',
+		'crate'
 	].includes(key);
 }
 
 function isAbilityKey(key) {
 	return [
-		'atk', 'matk', 'def', 'mdef',
-		'hp', 'sp', 'mhp', 'msp',
-		'hit', 'flee', 'cri', 'aspd',
+		'atk',
+		'matk',
+		'def',
+		'mdef',
+		'hp',
+		'sp',
+		'mhp',
+		'msp',
+		'hit',
+		'flee',
+		'cri',
+		'aspd',
 		'perfectDodge',
-		'afterDelay', 'varCast', 'fixCast', 'gcd'
+		'afterDelay',
+		'varCast',
+		'fixCast',
+		'gcd'
 	].includes(key);
 }
 
@@ -107,11 +133,15 @@ function hasStatKeyword(text) {
 }
 
 function hasAbilityKeyword(text) {
-	return /(^|[^A-Z.])(ATK|MATK|DEF|MDEF|HP|SP|MHP|MSP|MAXHP|MAXSP|HIT|FLEE|CRI|ASPD)\b|완전회피|캐스팅|쿨타임|후딜레이|공격속도/i.test(text);
+	return /(^|[^A-Z.])(ATK|MATK|DEF|MDEF|HP|SP|MHP|MSP|MAXHP|MAXSP|HIT|FLEE|CRI|ASPD)\b|완전회피|캐스팅|쿨타임|후딜레이|공격속도/i.test(
+		text
+	);
 }
 
 function hasBattleKeyword(text) {
-	return /원거리|근접|크리티컬 데미지|크리 데미지|소형|중형|대형|모든 크기|방어 무시|방어력 무시|마법 방어 무시|마법 방어력 무시|관통|물리 데미지|마법 데미지/.test(text);
+	return /원거리|근접|크리티컬 데미지|크리 데미지|소형|중형|대형|모든 크기|방어 무시|방어력 무시|마법 방어 무시|마법 방어력 무시|관통|물리 데미지|마법 데미지/.test(
+		text
+	);
 }
 
 export default Classifier;

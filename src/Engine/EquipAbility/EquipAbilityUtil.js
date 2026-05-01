@@ -29,24 +29,26 @@ const Util = {};
 Util.normalize = function normalize(line) {
 	if (!line) return '';
 
-	return String(line)
-		// RO 색상 코드 제거
-		// Remove RO color codes
-		.replace(/\^[0-9A-Fa-f]{6}/g, '')
-		.replace(/\^000000/g, '')
+	return (
+		String(line)
+			// RO 색상 코드 제거
+			// Remove RO color codes
+			.replace(/\^[0-9A-Fa-f]{6}/g, '')
+			.replace(/\^000000/g, '')
 
-		// 따옴표 제거
-		// Remove quotes
-		.replace(/[“”"]/g, '')
+			// 따옴표 제거
+			// Remove quotes
+			.replace(/[“”"]/g, '')
 
-		// 특수 공백 정리
-		// Normalize special spaces
-		.replace(/\u00A0/g, ' ')
+			// 특수 공백 정리
+			// Normalize special spaces
+			.replace(/\u00A0/g, ' ')
 
-		// 불필요 공백 제거
-		// Remove duplicate spaces
-		.replace(/\s+/g, ' ')
-		.trim();
+			// 불필요 공백 제거
+			// Remove duplicate spaces
+			.replace(/\s+/g, ' ')
+			.trim()
+	);
 };
 
 /**
@@ -226,13 +228,17 @@ Util.unique = function unique(arr) {
  * Escape HTML
  */
 Util.escapeHtml = function escapeHtml(str) {
-	return String(str).replace(/[&<>"']/g, ch => ({
-		'&': '&amp;',
-		'<': '&lt;',
-		'>': '&gt;',
-		'"': '&quot;',
-		"'": '&#39;'
-	}[ch]));
+	return String(str).replace(
+		/[&<>"']/g,
+		ch =>
+			({
+				'&': '&amp;',
+				'<': '&lt;',
+				'>': '&gt;',
+				'"': '&quot;',
+				"'": '&#39;'
+			})[ch]
+	);
 };
 
 /**
